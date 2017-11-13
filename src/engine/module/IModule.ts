@@ -1,4 +1,5 @@
 import { Context } from "koa";
+import IDisposable from "../../core/interfaces/IDisposable";
 
 /**
  * @author Raykid
@@ -8,7 +9,7 @@ import { Context } from "koa";
  * 
  * 业务模块接口
 */
-export default interface IModule
+export default interface IModule extends IDisposable
 {
     /**
      * 运行模块

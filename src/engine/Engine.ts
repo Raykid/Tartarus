@@ -64,6 +64,8 @@ export default class Engine
             {
                 // 使用await执行，便于处理异步操作
                 await target.exec(ctx);
+                // 销毁模块
+                target.dispose();
                 return;
             }
         }

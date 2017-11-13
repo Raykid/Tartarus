@@ -10,16 +10,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Injector_1 = require("../../dist/core/injector/Injector");
-const Core_1 = require("../../dist/core/Core");
 const Injector_2 = require("../../dist/engine/injector/Injector");
 const SystemUtil_1 = require("../../dist/utils/SystemUtil");
 const Engine_1 = require("../../dist/engine/Engine");
-let Mod1 = class Mod1 {
+const Module_1 = require("../../dist/engine/module/Module");
+let Mod1 = class Mod1 extends Module_1.default {
     async exec(ctx) {
         console.log("before sleep. " + new Date().toTimeString());
         await SystemUtil_1.sleep(2000);
         console.log(this._engine);
-        Core_1.core.dispatch("fuck", 1);
+        this.dispatch("fuck", 1);
         console.log("after sleep. " + new Date().toTimeString());
         // 这里返回值
         ctx.body = "This is Mod1!!!";
