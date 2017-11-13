@@ -40,12 +40,6 @@ export declare function isEmpty(obj: any): boolean;
  */
 export declare function trimData(data: any): any;
 /**
- * 让child类继承自parent类
- * @param child 子类
- * @param parent 父类
- */
-export declare var extendsClass: (child: any, parent: any) => void;
-/**
  * 获取一个对象的对象哈希字符串
  *
  * @export

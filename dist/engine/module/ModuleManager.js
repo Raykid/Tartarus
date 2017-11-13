@@ -43,7 +43,9 @@ let ModuleManager = class ModuleManager {
             if (cls)
                 result = new cls();
         }
-        catch (err) { }
+        catch (err) {
+            console.error(err.message);
+        }
         return result;
     }
     /**

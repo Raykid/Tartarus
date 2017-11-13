@@ -20,6 +20,18 @@ export default class Engine
 {
     private _app:Application;
 
+    /**
+     * 获取koa的app实例
+     * 
+     * @readonly
+     * @type {Application}
+     * @memberof Engine
+     */
+    public get app():Application
+    {
+        return this._app;
+    }
+
     public initialize(params:EngineInitParams):void
     {
         this._app = new Application();

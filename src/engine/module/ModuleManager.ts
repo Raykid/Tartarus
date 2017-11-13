@@ -3,6 +3,7 @@ import { Injectable } from "../../core/injector/Injector";
 import { core } from "../../core/Core";
 import IModule from "./IModule";
 import { environment } from "../env/Environment";
+import IModuleConstructor from "./IModuleConstructor";
 
 /**
  * @author Raykid
@@ -36,10 +37,12 @@ export default class ModuleManager
         var result:IModule;
         try
         {
-            var cls:IConstructor = require(route).default;
+            var cls:IModuleConstructor = require(route).default;
             if(cls) result = new cls();
         }
-        catch(err){}
+        catch(err){
+            console.error(err.message);
+        }
         return result;
     }
 

@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const ObjectUtil_1 = require("../utils/ObjectUtil");
 const Dictionary_1 = require("../utils/Dictionary");
 /**
  * @author Raykid
@@ -29,9 +28,7 @@ function handleInstance(instance) {
 function wrapConstruct(cls) {
     // 创建一个新的构造函数
     var func;
-    eval('func = function ' + cls["name"] + '(){onConstruct.call(this, arguments)}');
-    // 动态设置继承
-    ObjectUtil_1.extendsClass(func, cls);
+    eval('func = class ' + cls["name"] + ' extends cls{constructor(...args){super(...args);onConstruct.call(this, args)}}');
     // 为新的构造函数打一个标签，用以记录原始的构造函数
     func["__ori_constructor__"] = cls;
     // 为原始构造函数也打一个标签，用以记录新构造函数
@@ -41,8 +38,6 @@ function wrapConstruct(cls) {
     function onConstruct(args) {
         // 恢复__proto__
         this["__proto__"] = cls.prototype;
-        // 调用父类构造函数构造实例
-        cls.apply(this, args);
         // 调用回调
         handleInstance(this);
     }

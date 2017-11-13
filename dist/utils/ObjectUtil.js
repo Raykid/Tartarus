@@ -100,23 +100,6 @@ function trimData(data) {
     return data;
 }
 exports.trimData = trimData;
-/**
- * 让child类继承自parent类
- * @param child 子类
- * @param parent 父类
- */
-exports.extendsClass = (function () {
-    var extendStatics = Object["setPrototypeOf"] ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b)
-            if (b.hasOwnProperty(p))
-                d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var hash = 0;
 var hashTypes = ["object", "function"];
 /**

@@ -21,6 +21,16 @@ const Environment_1 = require("./env/Environment");
  * Tartarus的引擎类
 */
 let Engine = class Engine {
+    /**
+     * 获取koa的app实例
+     *
+     * @readonly
+     * @type {Application}
+     * @memberof Engine
+     */
+    get app() {
+        return this._app;
+    }
     initialize(params) {
         this._app = new Application();
         // 初始化environment

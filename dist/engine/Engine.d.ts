@@ -1,3 +1,5 @@
+/// <reference types="koa" />
+import Application = require("koa");
 /**
  * @author Raykid
  * @email initial_r@qq.com
@@ -8,6 +10,14 @@
 */
 export default class Engine {
     private _app;
+    /**
+     * 获取koa的app实例
+     *
+     * @readonly
+     * @type {Application}
+     * @memberof Engine
+     */
+    readonly app: Application;
     initialize(params: EngineInitParams): void;
     private onGetRequest(ctx);
 }

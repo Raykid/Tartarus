@@ -1,5 +1,4 @@
 import IConstructor from "../core/interfaces/IConstructor";
-import { extendsClass } from "../utils/ObjectUtil";
 import Dictionary from "../utils/Dictionary";
 
 /**
@@ -32,9 +31,7 @@ export function wrapConstruct(cls:IConstructor):IConstructor
 {
     // 创建一个新的构造函数
     var func:IConstructor;
-    eval('func = function ' + cls["name"] + '(){onConstruct.call(this, arguments)}');
-    // 动态设置继承
-    extendsClass(func, cls);
+    eval('func = class ' + cls["name"] + ' extends cls{constructor(...args){super(...args);onConstruct.call(this, args)}}');
     // 为新的构造函数打一个标签，用以记录原始的构造函数
     func["__ori_constructor__"] = cls;
     // 为原始构造函数也打一个标签，用以记录新构造函数
@@ -46,8 +43,6 @@ export function wrapConstruct(cls:IConstructor):IConstructor
     {
         // 恢复__proto__
         this["__proto__"] = cls.prototype;
-        // 调用父类构造函数构造实例
-        cls.apply(this, args);
         // 调用回调
         handleInstance(this);
     }
