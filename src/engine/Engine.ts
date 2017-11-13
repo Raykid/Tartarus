@@ -1,7 +1,11 @@
 import Application = require("koa");
 import { Context } from "koa";
+import path = require("path");
 import { Injectable } from "../core/injector/Injector";
 import { core } from "../core/Core";
+import { moduleManager } from "./module/ModuleManager";
+import IModule from "./module/IModule";
+import { environment } from "./env/Environment";
 
 /**
  * @author Raykid
@@ -19,6 +23,8 @@ export default class Engine
     public initialize(params:EngineInitParams):void
     {
         this._app = new Application();
+        // 初始化environment
+        environment.initialize(params.rootDir);
         // 添加分流逻辑
         this._app.use(this.onGetRequest.bind(this));
         // 遍历koa初始化参数数组
@@ -37,6 +43,19 @@ export default class Engine
 
     private async onGetRequest(ctx:Context):Promise<void>
     {
+        var extname:string = path.extname(ctx.path);
+        if(extname == "")
+        {
+            // 没有扩展名，尝试去寻找逻辑代码
+            var target:IModule = moduleManager.getModule(ctx.path);
+            if(target)
+            {
+                // 使用await执行，便于处理异步操作
+                await target.exec(ctx);
+                return;
+            }
+        }
+        // TODO Raykid 作为静态资源处理
         ctx.body = "Fuck you!!!";
     }
 }
@@ -70,7 +89,20 @@ export type EntityType = number | EntityParams;
 
 export interface EngineInitParams
 {
-    entity: EntityType | EntityType[];
+    /**
+     * 初始化参数实体，可以是一个端口号，也可以是端口号列表，或者详细数据或详细数据列表
+     * 
+     * @type {(EntityType | EntityType[])}
+     * @memberof EngineInitParams
+     */
+    entity:EntityType | EntityType[];
+    /**
+     * 静态资源根目录地址
+     * 
+     * @type {string}
+     * @memberof EngineInitParams
+     */
+    rootDir:string;
 }
 
 /** 再额外导出一个单例 */

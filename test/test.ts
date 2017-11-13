@@ -9,5 +9,6 @@ import Tartarus from "../dist/Tartarus";
  * 测试工程
 */
 Tartarus.startup({
-    entity: 12345
+    entity: 12345,
+    rootDir: "./webroot/"
 });

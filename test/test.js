@@ -10,6 +10,7 @@ const Tartarus_1 = require("../dist/Tartarus");
  * 测试工程
 */
 Tartarus_1.default.startup({
-    entity: 12345
+    entity: 12345,
+    rootDir: "./webroot/"
 });
 //# sourceMappingURL=test.js.map

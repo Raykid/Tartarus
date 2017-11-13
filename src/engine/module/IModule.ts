@@ -1,3 +1,5 @@
+import { Context } from "koa";
+
 /**
  * @author Raykid
  * @email initial_r@qq.com
@@ -8,4 +10,11 @@
 */
 export default interface IModule
 {
+    /**
+     * 运行模块
+     * 
+     * @param {Context} ctx 运行上下文
+     * @memberof IModule
+     */
+    exec(ctx:Context):void;
 }

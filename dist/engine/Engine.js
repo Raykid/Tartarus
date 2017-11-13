@@ -7,8 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Application = require("koa");
+const path = require("path");
 const Injector_1 = require("../core/injector/Injector");
 const Core_1 = require("../core/Core");
+const ModuleManager_1 = require("./module/ModuleManager");
+const Environment_1 = require("./env/Environment");
 /**
  * @author Raykid
  * @email initial_r@qq.com
@@ -20,6 +23,8 @@ const Core_1 = require("../core/Core");
 let Engine = class Engine {
     initialize(params) {
         this._app = new Application();
+        // 初始化environment
+        Environment_1.environment.initialize(params.rootDir);
         // 添加分流逻辑
         this._app.use(this.onGetRequest.bind(this));
         // 遍历koa初始化参数数组
@@ -36,6 +41,17 @@ let Engine = class Engine {
         }
     }
     async onGetRequest(ctx) {
+        var extname = path.extname(ctx.path);
+        if (extname == "") {
+            // 没有扩展名，尝试去寻找逻辑代码
+            var target = ModuleManager_1.moduleManager.getModule(ctx.path);
+            if (target) {
+                // 使用await执行，便于处理异步操作
+                await target.exec(ctx);
+                return;
+            }
+        }
+        // TODO Raykid 作为静态资源处理
         ctx.body = "Fuck you!!!";
     }
 };
