@@ -6,11 +6,10 @@
     "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "outDir": "./dist/",
-    "allowJs": true
+    "outDir": "../dist/"
   },
-  "files": [
-    "./src/index.ts"
+  "include": [
+    "./*"
   ],
   "exclude": [
     "node_modules"
