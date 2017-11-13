@@ -1,5 +1,13 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const Injector_1 = require("../../core/injector/Injector");
+const Core_1 = require("../../core/Core");
 /**
  * @author Raykid
  * @email initial_r@qq.com
@@ -8,7 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  *
  * 模块管理器
 */
-class ModuleManager {
+let ModuleManager = class ModuleManager {
     /**
      * 获取业务模块引用
      *
@@ -55,7 +63,11 @@ class ModuleManager {
         // 重新获取业务模块
         return this.getModule(path);
     }
-}
+};
+ModuleManager = __decorate([
+    Injector_1.Injectable
+], ModuleManager);
 exports.default = ModuleManager;
-exports.moduleManager = new ModuleManager();
+/** 再额外导出一个单例 */
+exports.moduleManager = Core_1.core.getInject(ModuleManager);
 //# sourceMappingURL=ModuleManager.js.map

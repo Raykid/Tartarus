@@ -38,4 +38,5 @@ export declare type EntityType = number | EntityParams;
 export interface EngineInitParams {
     entity: EntityType | EntityType[];
 }
+/** 再额外导出一个单例 */
 export declare const engine: Engine;

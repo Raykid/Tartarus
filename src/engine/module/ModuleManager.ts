@@ -1,3 +1,5 @@
+import { Injectable } from "../../core/injector/Injector";
+import { core } from "../../core/Core";
 import IModule from "./IModule";
 
 /**
@@ -8,6 +10,7 @@ import IModule from "./IModule";
  * 
  * 模块管理器
 */
+@Injectable
 export default class ModuleManager
 {
     /**
@@ -60,4 +63,5 @@ export default class ModuleManager
         return this.getModule(path);
     }
 }
-export const moduleManager:ModuleManager = new ModuleManager();
+/** 再额外导出一个单例 */
+export const moduleManager:ModuleManager = core.getInject(ModuleManager);

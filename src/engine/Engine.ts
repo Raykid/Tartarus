@@ -1,5 +1,7 @@
 import Application = require("koa");
 import { Context } from "koa";
+import { Injectable } from "../core/injector/Injector";
+import { core } from "../core/Core";
 
 /**
  * @author Raykid
@@ -9,6 +11,7 @@ import { Context } from "koa";
  * 
  * Tartarus的引擎类
 */
+@Injectable
 export default class Engine
 {
     private _app:Application;
@@ -70,4 +73,5 @@ export interface EngineInitParams
     entity: EntityType | EntityType[];
 }
 
-export const engine:Engine = new Engine();
+/** 再额外导出一个单例 */
+export const engine:Engine = core.getInject(Engine);
