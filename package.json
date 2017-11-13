@@ -1,0 +1,23 @@
+{
+  "name": "tartarus",
+  "version": "1.0.0",
+  "description": "基于koa2的NodeJs服务器开发框架",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Raykid/Tartarus.git"
+  },
+  "author": "Raykid",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Raykid/Tartarus/issues"
+  },
+  "homepage": "https://github.com/Raykid/Tartarus#readme",
+  "dependencies": {
+    "@types/koa": "^2.0.40",
+    "koa": "^2.4.1"
+  }
+}
