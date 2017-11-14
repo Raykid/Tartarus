@@ -13,6 +13,7 @@ import dynamicMiddleware from "./middleware/DynamicMiddleware";
 import { routerManager } from "./router/RouterManager";
 import { DeleteModuleRouter, RefreshModuleRouter } from "./router/EngineRouters";
 import IRouter from "./router/IRouter";
+import { contains } from "../utils/PathUtil";
 
 /**
  * @author Raykid
@@ -61,7 +62,15 @@ export default class Engine
         // 动态逻辑路由
         if(params.dynamicDir)
         {
-            this._app.use(dynamicMiddleware);
+            // 判断动态目录和静态目录是否有嵌套关系，有嵌套关系则不允许设置动态目录（为了安全考虑）
+            if(!contains(environment.dynamicDir, environment.staticDir) && !contains(environment.staticDir, environment.dynamicDir))
+            {
+                this._app.use(dynamicMiddleware);
+            }
+            else
+            {
+                console.error("动态目录创建失败：动态目录和静态目录不允许相等或相互嵌套");
+            }
         }
         // 托管静态资源
         if(params.staticDir)

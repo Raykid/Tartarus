@@ -16,6 +16,7 @@ const Environment_1 = require("./env/Environment");
 const DynamicMiddleware_1 = require("./middleware/DynamicMiddleware");
 const RouterManager_1 = require("./router/RouterManager");
 const EngineRouters_1 = require("./router/EngineRouters");
+const PathUtil_1 = require("../utils/PathUtil");
 /**
  * @author Raykid
  * @email initial_r@qq.com
@@ -55,7 +56,13 @@ let Engine = class Engine {
         }
         // 动态逻辑路由
         if (params.dynamicDir) {
-            this._app.use(DynamicMiddleware_1.default);
+            // 判断动态目录和静态目录是否有嵌套关系，有嵌套关系则不允许设置动态目录（为了安全考虑）
+            if (!PathUtil_1.contains(Environment_1.environment.dynamicDir, Environment_1.environment.staticDir) && !PathUtil_1.contains(Environment_1.environment.staticDir, Environment_1.environment.dynamicDir)) {
+                this._app.use(DynamicMiddleware_1.default);
+            }
+            else {
+                console.error("动态目录创建失败：动态目录和静态目录不允许相等或相互嵌套");
+            }
         }
         // 托管静态资源
         if (params.staticDir) {
