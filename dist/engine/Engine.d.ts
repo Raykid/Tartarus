@@ -1,6 +1,5 @@
 /// <reference types="koa" />
 import Application = require("koa");
-import Router = require("koa-router");
 /**
  * @author Raykid
  * @email initial_r@qq.com
@@ -19,15 +18,6 @@ export default class Engine {
      * @memberof Engine
      */
     readonly app: Application;
-    private _router;
-    /**
-     * 获取路由对象
-     *
-     * @readonly
-     * @type {Router}
-     * @memberof Engine
-     */
-    readonly router: Router;
     initialize(params: EngineInitParams): void;
 }
 export interface EntityParams {

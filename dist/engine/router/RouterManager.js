@@ -6,6 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Router = require("koa-router");
 const Injector_1 = require("../../core/injector/Injector");
 const Core_1 = require("../../core/Core");
 const Engine_1 = require("../Engine");
@@ -19,13 +20,31 @@ const Engine_1 = require("../Engine");
 */
 let RouterManager = class RouterManager {
     /**
+     * 获取路由对象
+     *
+     * @readonly
+     * @type {Router}
+     * @memberof Engine
+     */
+    get router() {
+        return this._router;
+    }
+    initialize() {
+        // 生成预逻辑路由
+        this._router = new Router();
+        Engine_1.engine.app.use(this._router.routes());
+        Engine_1.engine.app.use(this._router.allowedMethods());
+        // 注入路由实例
+        Core_1.core.mapInjectValue(this._router);
+    }
+    /**
      * 注册全局Router
      *
      * @param {IRouter} router 要注册的全局Router
      * @memberof RouterManager
      */
     registerRouter(router) {
-        Engine_1.engine.router.all(router.path, router.exec.bind(router));
+        this._router.all(router.path, router.exec.bind(router));
     }
 };
 RouterManager = __decorate([

@@ -1,3 +1,4 @@
+import Router = require("koa-router");
 import { Injectable } from "../../core/injector/Injector";
 import { core } from "../../core/Core";
 import IRouter from "./IRouter";
@@ -14,6 +15,29 @@ import { engine } from "../Engine";
 @Injectable
 export default class RouterManager
 {
+    private _router:Router;
+    /**
+     * 获取路由对象
+     * 
+     * @readonly
+     * @type {Router}
+     * @memberof Engine
+     */
+    public get router():Router
+    {
+        return this._router;
+    }
+
+    public initialize():void
+    {
+        // 生成预逻辑路由
+        this._router = new Router();
+        engine.app.use(this._router.routes());
+        engine.app.use(this._router.allowedMethods());
+        // 注入路由实例
+        core.mapInjectValue(this._router);
+    }
+    
     /**
      * 注册全局Router
      * 
@@ -22,7 +46,7 @@ export default class RouterManager
      */
     public registerRouter(router:IRouter):void
     {
-        engine.router.all(router.path, router.exec.bind(router));
+        this._router.all(router.path, router.exec.bind(router));
     }
 }
 /** 再额外导出一个单例 */

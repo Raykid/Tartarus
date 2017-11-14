@@ -1,3 +1,4 @@
+import Router = require("koa-router");
 import IRouter from "./IRouter";
 /**
  * @author Raykid
@@ -8,6 +9,16 @@ import IRouter from "./IRouter";
  * Router管理器
 */
 export default class RouterManager {
+    private _router;
+    /**
+     * 获取路由对象
+     *
+     * @readonly
+     * @type {Router}
+     * @memberof Engine
+     */
+    readonly router: Router;
+    initialize(): void;
     /**
      * 注册全局Router
      *

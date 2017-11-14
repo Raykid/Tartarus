@@ -1,7 +1,6 @@
 import Application = require("koa");
 import logger = require("koa-logger");
 import bodyParser = require("koa-bodyparser");
-import Router = require("koa-router");
 import staticServer = require("koa-static");
 import { Context } from "koa";
 import path = require("path");
@@ -38,19 +37,6 @@ export default class Engine
         return this._app;
     }
 
-    private _router:Router;
-    /**
-     * 获取路由对象
-     * 
-     * @readonly
-     * @type {Router}
-     * @memberof Engine
-     */
-    public get router():Router
-    {
-        return this._router;
-    }
-
     public initialize(params:EngineInitParams):void
     {
         // 生成并注入app实例
@@ -62,12 +48,8 @@ export default class Engine
         this._app.use(logger());
         // body转换器
         this._app.use(bodyParser());
-        // 生成并注入预逻辑路由
-        this._router = new Router();
-        core.mapInjectValue(this._router);
-        this._app.use(this._router.routes());
-        this._app.use(this._router.allowedMethods());
         // 注册全局路由命令
+        routerManager.initialize();
         routerManager.registerRouter(new DeleteModuleRouter());
         routerManager.registerRouter(new RefreshModuleRouter());
         // 动态逻辑路由

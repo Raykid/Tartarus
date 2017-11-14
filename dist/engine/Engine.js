@@ -9,7 +9,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Application = require("koa");
 const logger = require("koa-logger");
 const bodyParser = require("koa-bodyparser");
-const Router = require("koa-router");
 const staticServer = require("koa-static");
 const Injector_1 = require("../core/injector/Injector");
 const Core_1 = require("../core/Core");
@@ -36,16 +35,6 @@ let Engine = class Engine {
     get app() {
         return this._app;
     }
-    /**
-     * 获取路由对象
-     *
-     * @readonly
-     * @type {Router}
-     * @memberof Engine
-     */
-    get router() {
-        return this._router;
-    }
     initialize(params) {
         // 生成并注入app实例
         this._app = new Application();
@@ -56,12 +45,8 @@ let Engine = class Engine {
         this._app.use(logger());
         // body转换器
         this._app.use(bodyParser());
-        // 生成并注入预逻辑路由
-        this._router = new Router();
-        Core_1.core.mapInjectValue(this._router);
-        this._app.use(this._router.routes());
-        this._app.use(this._router.allowedMethods());
         // 注册全局路由命令
+        RouterManager_1.routerManager.initialize();
         RouterManager_1.routerManager.registerRouter(new EngineRouters_1.DeleteModuleRouter());
         RouterManager_1.routerManager.registerRouter(new EngineRouters_1.RefreshModuleRouter());
         // 动态逻辑路由
