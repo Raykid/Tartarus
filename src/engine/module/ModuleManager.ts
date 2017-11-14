@@ -16,6 +16,8 @@ import IModuleConstructor from "./IModuleConstructor";
 @Injectable
 export default class ModuleManager
 {
+    private _moduleDict:{[route:string]:IModule} = {};
+
     /**
      * 将相对于dynamicDir的相对路径转换成可用的路由地址
      * 
@@ -49,14 +51,18 @@ export default class ModuleManager
         // 转换路由地址
         route = this.getRoute(route);
         // 通过requre获取
-        var result:IModule;
-        try
+        var result:IModule = this._moduleDict[route];
+        if(!result)
         {
-            var cls:IModuleConstructor = require(route).default;
-            if(cls) result = new cls();
-        }
-        catch(err){
-            console.error(err.message);
+            // TODO Raykid 这里要做校验，否则会造成代码注入风险
+            try
+            {
+                var cls:IModuleConstructor = require(route).default;
+                if(cls) this._moduleDict[route] = result = new cls();
+            }
+            catch(err){
+                console.error(err.message);
+            }
         }
         return result;
     }
@@ -72,11 +78,13 @@ export default class ModuleManager
     {
         // 转换路由地址
         route = this.getRoute(route);
-        // 清除缓存
+        // 清除reqiure缓存
         var Module = require("module");
         var routeName:string = Module["_resolveFilename"](route, module);
         var cache:IModule = Module["_cache"][routeName];
         delete Module["_cache"][routeName];
+        // 删除本地缓存
+        delete this._moduleDict[route];
         return cache;
     }
 

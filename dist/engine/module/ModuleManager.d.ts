@@ -8,6 +8,7 @@ import IModule from "./IModule";
  * 模块管理器
 */
 export default class ModuleManager {
+    private _moduleDict;
     /**
      * 将相对于dynamicDir的相对路径转换成可用的路由地址
      *

@@ -20,6 +20,17 @@ const Environment_1 = require("../env/Environment");
 */
 let ModuleManager = class ModuleManager {
     /**
+     * @author Raykid
+     * @email initial_r@qq.com
+     * @create date 2017-11-13
+     * @modify date 2017-11-13
+     *
+     * 模块管理器
+    */
+    constructor() {
+        this._moduleDict = {};
+    }
+    /**
      * 将相对于dynamicDir的相对路径转换成可用的路由地址
      *
      * @param {string} route
@@ -50,14 +61,17 @@ let ModuleManager = class ModuleManager {
         // 转换路由地址
         route = this.getRoute(route);
         // 通过requre获取
-        var result;
-        try {
-            var cls = require(route).default;
-            if (cls)
-                result = new cls();
-        }
-        catch (err) {
-            console.error(err.message);
+        var result = this._moduleDict[route];
+        if (!result) {
+            // TODO Raykid 这里要做校验，否则会造成代码注入风险
+            try {
+                var cls = require(route).default;
+                if (cls)
+                    this._moduleDict[route] = result = new cls();
+            }
+            catch (err) {
+                console.error(err.message);
+            }
         }
         return result;
     }
@@ -71,11 +85,13 @@ let ModuleManager = class ModuleManager {
     deleteModule(route) {
         // 转换路由地址
         route = this.getRoute(route);
-        // 清除缓存
+        // 清除reqiure缓存
         var Module = require("module");
         var routeName = Module["_resolveFilename"](route, module);
         var cache = Module["_cache"][routeName];
         delete Module["_cache"][routeName];
+        // 删除本地缓存
+        delete this._moduleDict[route];
         return cache;
     }
     /**
