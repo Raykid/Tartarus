@@ -7,5 +7,7 @@ import IModuleConstructor from "../module/IModuleConstructor";
  *
  * Engine的装饰器定义
 */
+/** 定义数据模型，支持实例注入，并且自身也会被注入 */
+export declare function ModelClass(...args: any[]): any;
 /** 定义模块，支持实例注入 */
 export declare function ModuleClass(cls: IModuleConstructor): IConstructor;

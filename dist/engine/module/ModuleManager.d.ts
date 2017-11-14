@@ -9,6 +9,14 @@ import IModule from "./IModule";
 */
 export default class ModuleManager {
     /**
+     * 将相对于dynamicDir的相对路径转换成可用的路由地址
+     *
+     * @param {string} route
+     * @returns {string}
+     * @memberof ModuleManager
+     */
+    private getRoute(route);
+    /**
      * 获取业务模块引用
      *
      * @param {string} route 业务模块对应路由路径

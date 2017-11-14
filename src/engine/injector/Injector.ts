@@ -1,5 +1,6 @@
-import IModuleConstructor from "../module/IModuleConstructor";
+import { Injectable } from "../../core/injector/Injector";
 import { wrapConstruct } from "../../utils/ConstructUtil";
+import IModuleConstructor from "../module/IModuleConstructor";
 
 /**
  * @author Raykid
@@ -9,6 +10,29 @@ import { wrapConstruct } from "../../utils/ConstructUtil";
  * 
  * Engine的装饰器定义
 */
+
+/** 定义数据模型，支持实例注入，并且自身也会被注入 */
+export function ModelClass(...args:any[]):any
+{
+    // 转调Injectable方法
+    if(this === undefined)
+    {
+        var cls:IConstructor = wrapConstruct(args[0]);
+        Injectable.call(this, cls);
+        return cls;
+    }
+    else
+    {
+        var result:ClassDecorator = Injectable.apply(this, args);
+        return function(realCls:IConstructor):IConstructor
+        {
+            realCls = wrapConstruct(realCls);
+            result.call(this, realCls);
+            return realCls;
+        };
+    }
+}
+
 /** 定义模块，支持实例注入 */
 export function ModuleClass(cls:IModuleConstructor):IConstructor
 {

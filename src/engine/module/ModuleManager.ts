@@ -17,13 +17,13 @@ import IModuleConstructor from "./IModuleConstructor";
 export default class ModuleManager
 {
     /**
-     * 获取业务模块引用
+     * 将相对于dynamicDir的相对路径转换成可用的路由地址
      * 
-     * @param {string} route 业务模块对应路由路径
-     * @returns {IModule} 业务模块引用
+     * @param {string} route 
+     * @returns {string} 
      * @memberof ModuleManager
      */
-    public getModule(route:string):IModule
+    private getRoute(route:string):string
     {
         // 将路径连接到dynamicDir上
         route = path.resolve(environment.dynamicDir, "./" + route);
@@ -33,6 +33,21 @@ export default class ModuleManager
         route = route.replace(/\\/g, "/");
         // 如果前面没有.则加上./
         if(route.charAt(0) != ".") route = "./" + route;
+        // 返回路由地址
+        return route;
+    }
+
+    /**
+     * 获取业务模块引用
+     * 
+     * @param {string} route 业务模块对应路由路径
+     * @returns {IModule} 业务模块引用
+     * @memberof ModuleManager
+     */
+    public getModule(route:string):IModule
+    {
+        // 转换路由地址
+        route = this.getRoute(route);
         // 通过requre获取
         var result:IModule;
         try
@@ -55,8 +70,8 @@ export default class ModuleManager
      */
     public deleteModule(route:string):IModule
     {
-        // 给路径加上./
-        if(route.charAt(0) != ".") route = "./" + route;
+        // 转换路由地址
+        route = this.getRoute(route);
         // 清除缓存
         var Module = require("module");
         var routeName:string = Module["_resolveFilename"](route, module);

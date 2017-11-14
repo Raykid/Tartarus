@@ -51,15 +51,18 @@ export default class Engine
 
     public initialize(params:EngineInitParams):void
     {
+        // 生成并注入app实例
         this._app = new Application();
+        core.mapInjectValue(this._app);
         // 初始化environment
         environment.initialize(params.dynamicDir, params.staticDir);
         // 日志
         this._app.use(logger());
         // body转换器
         this._app.use(bodyParser());
-        // 默认路由
+        // 生成并注入预逻辑路由
         this._router = new Router();
+        core.mapInjectValue(this._router);
         this._app.use(this._router.routes());
         this._app.use(this._router.allowedMethods());
         // 动态逻辑路由

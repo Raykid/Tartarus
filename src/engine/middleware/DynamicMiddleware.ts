@@ -13,17 +13,18 @@ import { moduleManager } from "../module/ModuleManager";
 */
 export default async function dynamicMiddleware(ctx:Context, next:()=>Promise<any>):Promise<void>
 {
+    // 动态逻辑仅支持无扩展名形式，将有扩展名形式留给静态资源
     var extname:string = path.extname(ctx.path);
     if(extname == "")
     {
-        // 没有扩展名，尝试去寻找逻辑代码
         var target:IModule = moduleManager.getModule(ctx.path);
         if(target)
         {
             // 使用await执行，便于处理异步操作
             await target.exec(ctx);
-            // 销毁模块
-            target.dispose();
+            // 执行后即刻销毁，杜绝内存泄露
+            await target.dispose();
+            // 返回
             return;
         }
     }

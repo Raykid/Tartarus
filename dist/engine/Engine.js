@@ -45,15 +45,18 @@ let Engine = class Engine {
         return this._router;
     }
     initialize(params) {
+        // 生成并注入app实例
         this._app = new Application();
+        Core_1.core.mapInjectValue(this._app);
         // 初始化environment
         Environment_1.environment.initialize(params.dynamicDir, params.staticDir);
         // 日志
         this._app.use(logger());
         // body转换器
         this._app.use(bodyParser());
-        // 默认路由
+        // 生成并注入预逻辑路由
         this._router = new Router();
+        Core_1.core.mapInjectValue(this._router);
         this._app.use(this._router.routes());
         this._app.use(this._router.allowedMethods());
         // 动态逻辑路由
