@@ -49,6 +49,10 @@ let Engine = class Engine {
         RouterManager_1.routerManager.initialize();
         RouterManager_1.routerManager.registerRouter(new EngineRouters_1.DeleteModuleRouter());
         RouterManager_1.routerManager.registerRouter(new EngineRouters_1.RefreshModuleRouter());
+        // 注册用户路由命令
+        for (var key in params.routers) {
+            RouterManager_1.routerManager.registerRouter(params.routers[key]);
+        }
         // 动态逻辑路由
         if (params.dynamicDir) {
             this._app.use(DynamicMiddleware_1.default);

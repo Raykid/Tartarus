@@ -1,5 +1,6 @@
 /// <reference types="koa" />
 import Application = require("koa");
+import IRouter from "./router/IRouter";
 /**
  * @author Raykid
  * @email initial_r@qq.com
@@ -66,6 +67,13 @@ export interface EngineInitParams {
      * @memberof EngineInitParams
      */
     dynamicDir?: string;
+    /**
+     * 需要注册到系统中的全局Router数组，全局Router会在Module之前执行
+     *
+     * @type {IRouter[]}
+     * @memberof EngineInitParams
+     */
+    routers?: IRouter[];
 }
 /** 再额外导出一个单例 */
 export declare const engine: Engine;

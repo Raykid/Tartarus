@@ -12,6 +12,7 @@ import { environment } from "./env/Environment";
 import dynamicMiddleware from "./middleware/DynamicMiddleware";
 import { routerManager } from "./router/RouterManager";
 import { DeleteModuleRouter, RefreshModuleRouter } from "./router/EngineRouters";
+import IRouter from "./router/IRouter";
 
 /**
  * @author Raykid
@@ -52,6 +53,11 @@ export default class Engine
         routerManager.initialize();
         routerManager.registerRouter(new DeleteModuleRouter());
         routerManager.registerRouter(new RefreshModuleRouter());
+        // 注册用户路由命令
+        for(var key in params.routers)
+        {
+            routerManager.registerRouter(params.routers[key]);
+        }
         // 动态逻辑路由
         if(params.dynamicDir)
         {
@@ -127,6 +133,13 @@ export interface EngineInitParams
      * @memberof EngineInitParams
      */
     dynamicDir?:string;
+    /**
+     * 需要注册到系统中的全局Router数组，全局Router会在Module之前执行
+     * 
+     * @type {IRouter[]}
+     * @memberof EngineInitParams
+     */
+    routers?:IRouter[];
 }
 
 /** 再额外导出一个单例 */
