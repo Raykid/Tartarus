@@ -28,19 +28,17 @@ export default class ModuleManager {
     /**
      * 删除业务逻辑缓存
      *
-     * @param {string} route 业务模块对应路由路径
-     * @returns {IModule} 业务模块引用
+     * @param {string} [route] 业务模块对应路由路径，不传则代表全部删除
      * @memberof ModuleManager
      */
-    deleteModule(route: string): IModule;
+    deleteModule(route?: string): void;
     /**
      * 清除业务模块缓存，使之重新加载最新的业务逻辑
      *
-     * @param {string} route 业务模块对应路由路径
-     * @returns {IModule} 业务模块引用
+     * @param {string} [route] 业务模块对应路由路径，不传则代表全部刷新
      * @memberof ModuleManager
      */
-    refreshModule(route: string): IModule;
+    refreshModule(route?: string): void;
 }
 /** 再额外导出一个单例 */
 export declare const moduleManager: ModuleManager;

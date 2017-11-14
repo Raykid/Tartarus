@@ -78,34 +78,58 @@ let ModuleManager = class ModuleManager {
     /**
      * 删除业务逻辑缓存
      *
-     * @param {string} route 业务模块对应路由路径
-     * @returns {IModule} 业务模块引用
+     * @param {string} [route] 业务模块对应路由路径，不传则代表全部删除
      * @memberof ModuleManager
      */
     deleteModule(route) {
-        // 转换路由地址
-        route = this.getRoute(route);
-        // 清除reqiure缓存
-        var Module = require("module");
-        var routeName = Module["_resolveFilename"](route, module);
-        var cache = Module["_cache"][routeName];
-        delete Module["_cache"][routeName];
-        // 删除本地缓存
-        delete this._moduleDict[route];
-        return cache;
+        var routes = [];
+        if (route) {
+            routes.push(route);
+        }
+        else {
+            // 全部缓存模块都推入其中
+            for (var key in this._moduleDict) {
+                routes.push(key);
+            }
+        }
+        // 开始清除缓存
+        for (var route of routes) {
+            // 转换路由地址
+            route = this.getRoute(route);
+            if (this._moduleDict[route]) {
+                // 删除本地缓存
+                delete this._moduleDict[route];
+                // 清除reqiure缓存
+                var Module = require("module");
+                var routeName = Module["_resolveFilename"](route, module);
+                delete Module["_cache"][routeName];
+            }
+        }
     }
     /**
      * 清除业务模块缓存，使之重新加载最新的业务逻辑
      *
-     * @param {string} route 业务模块对应路由路径
-     * @returns {IModule} 业务模块引用
+     * @param {string} [route] 业务模块对应路由路径，不传则代表全部刷新
      * @memberof ModuleManager
      */
     refreshModule(route) {
-        // 删除业务模块缓存
-        this.deleteModule(route);
-        // 重新获取业务模块
-        return this.getModule(route);
+        var routes = [];
+        if (route) {
+            routes.push(route);
+        }
+        else {
+            // 全部缓存模块都推入其中
+            for (var key in this._moduleDict) {
+                routes.push(key);
+            }
+        }
+        // 开始刷新缓存
+        for (var route of routes) {
+            // 删除业务模块缓存
+            this.deleteModule(route);
+            // 重新获取业务模块
+            this.getModule(route);
+        }
     }
 };
 ModuleManager = __decorate([

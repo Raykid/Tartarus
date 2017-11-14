@@ -15,6 +15,8 @@ const Injector_1 = require("../core/injector/Injector");
 const Core_1 = require("../core/Core");
 const Environment_1 = require("./env/Environment");
 const DynamicMiddleware_1 = require("./middleware/DynamicMiddleware");
+const RouterManager_1 = require("./router/RouterManager");
+const EngineRouters_1 = require("./router/EngineRouters");
 /**
  * @author Raykid
  * @email initial_r@qq.com
@@ -59,6 +61,9 @@ let Engine = class Engine {
         Core_1.core.mapInjectValue(this._router);
         this._app.use(this._router.routes());
         this._app.use(this._router.allowedMethods());
+        // 注册全局路由命令
+        RouterManager_1.routerManager.registerRouter(new EngineRouters_1.DeleteModuleRouter());
+        RouterManager_1.routerManager.registerRouter(new EngineRouters_1.RefreshModuleRouter());
         // 动态逻辑路由
         if (params.dynamicDir) {
             this._app.use(DynamicMiddleware_1.default);

@@ -11,6 +11,8 @@ import { moduleManager } from "./module/ModuleManager";
 import IModule from "./module/IModule";
 import { environment } from "./env/Environment";
 import dynamicMiddleware from "./middleware/DynamicMiddleware";
+import { routerManager } from "./router/RouterManager";
+import { DeleteModuleRouter, RefreshModuleRouter } from "./router/EngineRouters";
 
 /**
  * @author Raykid
@@ -65,6 +67,9 @@ export default class Engine
         core.mapInjectValue(this._router);
         this._app.use(this._router.routes());
         this._app.use(this._router.allowedMethods());
+        // 注册全局路由命令
+        routerManager.registerRouter(new DeleteModuleRouter());
+        routerManager.registerRouter(new RefreshModuleRouter());
         // 动态逻辑路由
         if(params.dynamicDir)
         {
