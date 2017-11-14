@@ -10,5 +10,6 @@ import Tartarus from "../dist/Tartarus";
 */
 Tartarus.startup({
     entity: 12345,
-    rootDir: "./webroot/"
+    dynamicDir: "./modules/",
+    staticDir: "./webroot/"
 });

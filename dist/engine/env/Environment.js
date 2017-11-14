@@ -29,16 +29,26 @@ let Environment = class Environment {
         return this._baseDir;
     }
     /**
+     * 获取动态逻辑代码根路径
+     *
+     * @readonly
+     * @type {string}
+     * @memberof Environment
+     */
+    get dynamicDir() {
+        return this._dynamicDir;
+    }
+    /**
      * 获取静态资源根路径
      *
      * @readonly
      * @type {string}
      * @memberof Engine
      */
-    get rootDir() {
-        return this._rootDir;
+    get staticDir() {
+        return this._staticDir;
     }
-    initialize(rootDir) {
+    initialize(dynamicDir, staticDir) {
         // 取到根模块路径，作为baseDir的值
         var temp = module;
         while (temp.parent) {
@@ -46,9 +56,14 @@ let Environment = class Environment {
         }
         this._baseDir = path.dirname(temp.filename);
         // 设置根路径，如果是相对路径则根据baseDir转换为绝对路径
-        this._rootDir = rootDir;
-        if (!path.isAbsolute(this._rootDir)) {
-            this._rootDir = path.resolve(this._baseDir, this._rootDir);
+        this._dynamicDir = dynamicDir;
+        if (this._dynamicDir && !path.isAbsolute(this._dynamicDir)) {
+            this._dynamicDir = path.resolve(this._baseDir, this._dynamicDir);
+        }
+        // 设置根路径，如果是相对路径则根据baseDir转换为绝对路径
+        this._staticDir = staticDir;
+        if (this._staticDir && !path.isAbsolute(this._staticDir)) {
+            this._staticDir = path.resolve(this._baseDir, this._staticDir);
         }
     }
 };

@@ -155,7 +155,7 @@ export function getQueryParams(url: string):{[key:string]:string}
         var pair: string[] = kv.split("=", 2);
         if (pair.length !== 2 || !pair[0])
         {
-            console.log(`[URLUtil] invalid query params: ${kv}`);
+            console.error(`[URLUtil] invalid query params: ${kv}`);
             return;
         }
         var name = decodeURIComponent(pair[0]);

@@ -18,6 +18,10 @@
   "homepage": "https://github.com/Raykid/Tartarus#readme",
   "dependencies": {
     "@types/koa": "^2.0.40",
-    "koa": "^2.4.1"
+    "koa": "^2.4.1",
+    "koa-bodyparser": "^4.2.0",
+    "koa-logger": "^3.1.0",
+    "koa-router": "^7.3.0",
+    "koa-static": "^4.0.1"
   }
 }

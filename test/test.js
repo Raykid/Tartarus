@@ -11,6 +11,7 @@ const Tartarus_1 = require("../dist/Tartarus");
 */
 Tartarus_1.default.startup({
     entity: 12345,
-    rootDir: "./webroot/"
+    dynamicDir: "./modules/",
+    staticDir: "./webroot/"
 });
 //# sourceMappingURL=test.js.map

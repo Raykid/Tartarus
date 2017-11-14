@@ -27,8 +27,8 @@ let ModuleManager = class ModuleManager {
      * @memberof ModuleManager
      */
     getModule(route) {
-        // 将路径连接到rootDir上
-        route = path.resolve(Environment_1.environment.rootDir, "./" + route);
+        // 将路径连接到dynamicDir上
+        route = path.resolve(Environment_1.environment.dynamicDir, "./" + route);
         // 求出路径到当前模块的相对路径
         route = path.relative(__dirname, route);
         // 规整路径

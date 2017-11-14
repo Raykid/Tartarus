@@ -1,5 +1,6 @@
 /// <reference types="koa" />
 import Application = require("koa");
+import Router = require("koa-router");
 /**
  * @author Raykid
  * @email initial_r@qq.com
@@ -18,8 +19,16 @@ export default class Engine {
      * @memberof Engine
      */
     readonly app: Application;
+    private _router;
+    /**
+     * 获取路由对象
+     *
+     * @readonly
+     * @type {Router}
+     * @memberof Engine
+     */
+    readonly router: Router;
     initialize(params: EngineInitParams): void;
-    private onGetRequest(ctx);
 }
 export interface EntityParams {
     /**
@@ -54,12 +63,19 @@ export interface EngineInitParams {
      */
     entity: EntityType | EntityType[];
     /**
-     * 静态资源根目录地址
+     * 静态资源根目录地址，没有则表示不具有静态资源服务器功能
      *
      * @type {string}
      * @memberof EngineInitParams
      */
-    rootDir: string;
+    staticDir?: string;
+    /**
+     * 动态逻辑代码根目录地址，没有则表示不具有动态逻辑服务器功能
+     *
+     * @type {string}
+     * @memberof EngineInitParams
+     */
+    dynamicDir?: string;
 }
 /** 再额外导出一个单例 */
 export declare const engine: Engine;

@@ -8,7 +8,6 @@
 */
 export default class Environment {
     private _baseDir;
-    private _rootDir;
     /**
      * 获取启动模块所在路径
      *
@@ -17,6 +16,16 @@ export default class Environment {
      * @memberof Engine
      */
     readonly baseDir: string;
+    private _dynamicDir;
+    /**
+     * 获取动态逻辑代码根路径
+     *
+     * @readonly
+     * @type {string}
+     * @memberof Environment
+     */
+    readonly dynamicDir: string;
+    private _staticDir;
     /**
      * 获取静态资源根路径
      *
@@ -24,8 +33,8 @@ export default class Environment {
      * @type {string}
      * @memberof Engine
      */
-    readonly rootDir: string;
-    initialize(rootDir?: string): void;
+    readonly staticDir: string;
+    initialize(dynamicDir?: string, staticDir?: string): void;
 }
 /** 再额外导出一个单例 */
 export declare const environment: Environment;

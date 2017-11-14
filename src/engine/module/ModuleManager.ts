@@ -25,8 +25,8 @@ export default class ModuleManager
      */
     public getModule(route:string):IModule
     {
-        // 将路径连接到rootDir上
-        route = path.resolve(environment.rootDir, "./" + route);
+        // 将路径连接到dynamicDir上
+        route = path.resolve(environment.dynamicDir, "./" + route);
         // 求出路径到当前模块的相对路径
         route = path.relative(__dirname, route);
         // 规整路径

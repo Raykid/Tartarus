@@ -1,4 +1,8 @@
 import Application = require("koa");
+import logger = require("koa-logger");
+import bodyParser = require("koa-bodyparser");
+import Router = require("koa-router");
+import staticServer = require("koa-static");
 import { Context } from "koa";
 import path = require("path");
 import { Injectable } from "../core/injector/Injector";
@@ -6,6 +10,7 @@ import { core } from "../core/Core";
 import { moduleManager } from "./module/ModuleManager";
 import IModule from "./module/IModule";
 import { environment } from "./env/Environment";
+import dynamicMiddleware from "./middleware/DynamicMiddleware";
 
 /**
  * @author Raykid
@@ -19,7 +24,6 @@ import { environment } from "./env/Environment";
 export default class Engine
 {
     private _app:Application;
-
     /**
      * 获取koa的app实例
      * 
@@ -32,13 +36,42 @@ export default class Engine
         return this._app;
     }
 
+    private _router:Router;
+    /**
+     * 获取路由对象
+     * 
+     * @readonly
+     * @type {Router}
+     * @memberof Engine
+     */
+    public get router():Router
+    {
+        return this._router;
+    }
+
     public initialize(params:EngineInitParams):void
     {
         this._app = new Application();
         // 初始化environment
-        environment.initialize(params.rootDir);
-        // 添加分流逻辑
-        this._app.use(this.onGetRequest.bind(this));
+        environment.initialize(params.dynamicDir, params.staticDir);
+        // 日志
+        this._app.use(logger());
+        // body转换器
+        this._app.use(bodyParser());
+        // 默认路由
+        this._router = new Router();
+        this._app.use(this._router.routes());
+        this._app.use(this._router.allowedMethods());
+        // 动态逻辑路由
+        if(params.dynamicDir)
+        {
+            this._app.use(dynamicMiddleware);
+        }
+        // 托管静态资源
+        if(params.staticDir)
+        {
+            this._app.use(staticServer(environment.staticDir));
+        }
         // 遍历koa初始化参数数组
         var entitys:EntityType | EntityType[] = params.entity;
         if(!(entitys instanceof Array)) entitys = [entitys];
@@ -51,26 +84,6 @@ export default class Engine
                 // 多参数方式
                 this._app.listen(entity.port || 12345, entity.hostname, entity.backlog);
         }
-    }
-
-    private async onGetRequest(ctx:Context):Promise<void>
-    {
-        var extname:string = path.extname(ctx.path);
-        if(extname == "")
-        {
-            // 没有扩展名，尝试去寻找逻辑代码
-            var target:IModule = moduleManager.getModule(ctx.path);
-            if(target)
-            {
-                // 使用await执行，便于处理异步操作
-                await target.exec(ctx);
-                // 销毁模块
-                target.dispose();
-                return;
-            }
-        }
-        // TODO Raykid 作为静态资源处理
-        ctx.body = "Fuck you!!!";
     }
 }
 
@@ -111,12 +124,19 @@ export interface EngineInitParams
      */
     entity:EntityType | EntityType[];
     /**
-     * 静态资源根目录地址
+     * 静态资源根目录地址，没有则表示不具有静态资源服务器功能
      * 
      * @type {string}
      * @memberof EngineInitParams
      */
-    rootDir:string;
+    staticDir?:string;
+    /**
+     * 动态逻辑代码根目录地址，没有则表示不具有动态逻辑服务器功能
+     * 
+     * @type {string}
+     * @memberof EngineInitParams
+     */
+    dynamicDir?:string;
 }
 
 /** 再额外导出一个单例 */

@@ -7,11 +7,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Application = require("koa");
-const path = require("path");
+const logger = require("koa-logger");
+const bodyParser = require("koa-bodyparser");
+const Router = require("koa-router");
+const staticServer = require("koa-static");
 const Injector_1 = require("../core/injector/Injector");
 const Core_1 = require("../core/Core");
-const ModuleManager_1 = require("./module/ModuleManager");
 const Environment_1 = require("./env/Environment");
+const DynamicMiddleware_1 = require("./middleware/DynamicMiddleware");
 /**
  * @author Raykid
  * @email initial_r@qq.com
@@ -31,12 +34,36 @@ let Engine = class Engine {
     get app() {
         return this._app;
     }
+    /**
+     * 获取路由对象
+     *
+     * @readonly
+     * @type {Router}
+     * @memberof Engine
+     */
+    get router() {
+        return this._router;
+    }
     initialize(params) {
         this._app = new Application();
         // 初始化environment
-        Environment_1.environment.initialize(params.rootDir);
-        // 添加分流逻辑
-        this._app.use(this.onGetRequest.bind(this));
+        Environment_1.environment.initialize(params.dynamicDir, params.staticDir);
+        // 日志
+        this._app.use(logger());
+        // body转换器
+        this._app.use(bodyParser());
+        // 默认路由
+        this._router = new Router();
+        this._app.use(this._router.routes());
+        this._app.use(this._router.allowedMethods());
+        // 动态逻辑路由
+        if (params.dynamicDir) {
+            this._app.use(DynamicMiddleware_1.default);
+        }
+        // 托管静态资源
+        if (params.staticDir) {
+            this._app.use(staticServer(Environment_1.environment.staticDir));
+        }
         // 遍历koa初始化参数数组
         var entitys = params.entity;
         if (!(entitys instanceof Array))
@@ -49,22 +76,6 @@ let Engine = class Engine {
                 // 多参数方式
                 this._app.listen(entity.port || 12345, entity.hostname, entity.backlog);
         }
-    }
-    async onGetRequest(ctx) {
-        var extname = path.extname(ctx.path);
-        if (extname == "") {
-            // 没有扩展名，尝试去寻找逻辑代码
-            var target = ModuleManager_1.moduleManager.getModule(ctx.path);
-            if (target) {
-                // 使用await执行，便于处理异步操作
-                await target.exec(ctx);
-                // 销毁模块
-                target.dispose();
-                return;
-            }
-        }
-        // TODO Raykid 作为静态资源处理
-        ctx.body = "Fuck you!!!";
     }
 };
 Engine = __decorate([
