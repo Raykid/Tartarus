@@ -2,6 +2,8 @@ import { Context } from "koa";
 import { core } from "../../core/Core";
 import IMessage from "../../core/message/IMessage";
 import IModule from "./IModule";
+import Request from "../net/server/Request";
+import Response from "../net/server/Response";
 
 /**
  * @author Raykid
@@ -49,10 +51,13 @@ export default abstract class Module implements IModule
     /**
      * 运行模块
      * 
-     * @param {Context} ctx 运行上下文
-     * @memberof IModule
+     * @abstract
+     * @param {Request} request 请求结构体
+     * @param {Context} [ctx] 运行上下文
+     * @returns {(Response|Promise<Response>)} 返回结构体数据
+     * @memberof Module
      */
-    public abstract exec(ctx:Context):void;
+    public abstract exec(request:Request, ctx?:Context):Response|Promise<Response>;
 
     /** 销毁 */
     public dispose():void

@@ -17,7 +17,7 @@ async function dynamicMiddleware(ctx, next) {
         var target = ModuleManager_1.moduleManager.getModule(ctx.path);
         if (target) {
             // 使用await执行，便于处理异步操作
-            await target.exec(ctx);
+            ctx.body = await target.exec(ctx.request["body"], ctx);
             // 执行后即刻销毁，杜绝内存泄露
             await target.dispose();
             // 返回

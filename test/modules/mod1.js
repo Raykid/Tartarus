@@ -14,9 +14,10 @@ const Injector_2 = require("../../dist/engine/injector/Injector");
 const Engine_1 = require("../../dist/engine/Engine");
 const Module_1 = require("../../dist/engine/module/Module");
 let Mod1 = class Mod1 extends Module_1.default {
-    async exec(ctx) {
-        // 这里返回值
-        ctx.body = "This is Mod1!!!";
+    exec(request) {
+        var response = request.createResponse();
+        response.fuck = request.holly;
+        return response;
     }
 };
 __decorate([

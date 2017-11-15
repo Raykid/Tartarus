@@ -1,4 +1,5 @@
 import Tartarus from "../dist/Tartarus";
+import TestRequest from "./net/TestRequest";
 
 /**
  * @author Raykid
@@ -11,5 +12,6 @@ import Tartarus from "../dist/Tartarus";
 Tartarus.startup({
     entity: 12345,
     dynamicDir: "./modules/",
-    staticDir: "./webroot/"
+    staticDir: "./webroot/",
+    requests: [TestRequest]
 });

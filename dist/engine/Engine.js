@@ -17,6 +17,7 @@ const DynamicMiddleware_1 = require("./middleware/DynamicMiddleware");
 const RouterManager_1 = require("./router/RouterManager");
 const EngineRouters_1 = require("./router/EngineRouters");
 const PathUtil_1 = require("../utils/PathUtil");
+const NetWrapperMiddleware_1 = require("./middleware/NetWrapperMiddleware");
 /**
  * @author Raykid
  * @email initial_r@qq.com
@@ -46,6 +47,8 @@ let Engine = class Engine {
         this._app.use(logger());
         // body转换器
         this._app.use(bodyParser());
+        // net解析打包器
+        this._app.use(NetWrapperMiddleware_1.default(params.requests));
         // 注册全局路由命令
         RouterManager_1.routerManager.initialize();
         RouterManager_1.routerManager.registerRouter(new EngineRouters_1.DeleteModuleRouter());
@@ -61,7 +64,7 @@ let Engine = class Engine {
                 this._app.use(DynamicMiddleware_1.default);
             }
             else {
-                console.error("动态目录创建失败：动态目录和静态目录不允许相等或相互嵌套");
+                console.error("d动态目录和静态目录不允许相等或相互嵌套");
             }
         }
         // 托管静态资源

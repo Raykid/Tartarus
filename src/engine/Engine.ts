@@ -14,6 +14,8 @@ import { routerManager } from "./router/RouterManager";
 import { DeleteModuleRouter, RefreshModuleRouter } from "./router/EngineRouters";
 import IRouter from "./router/IRouter";
 import { contains } from "../utils/PathUtil";
+import netWrapperMiddleware from "./middleware/NetWrapperMiddleware";
+import { IRequestConstructor } from "./net/server/Request";
 
 /**
  * @author Raykid
@@ -50,6 +52,8 @@ export default class Engine
         this._app.use(logger());
         // body转换器
         this._app.use(bodyParser());
+        // net解析打包器
+        this._app.use(netWrapperMiddleware(params.requests));
         // 注册全局路由命令
         routerManager.initialize();
         routerManager.registerRouter(new DeleteModuleRouter());
@@ -69,7 +73,7 @@ export default class Engine
             }
             else
             {
-                console.error("动态目录创建失败：动态目录和静态目录不允许相等或相互嵌套");
+                console.error("d动态目录和静态目录不允许相等或相互嵌套");
             }
         }
         // 托管静态资源
@@ -149,6 +153,13 @@ export interface EngineInitParams
      * @memberof EngineInitParams
      */
     routers?:IRouter[];
+    /**
+     * 需要注册的请求结构体类型数组
+     * 
+     * @type {IRequestConstructor[]}
+     * @memberof EngineInitParams
+     */
+    requests?:IRequestConstructor[];
 }
 
 /** 再额外导出一个单例 */

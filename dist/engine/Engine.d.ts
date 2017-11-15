@@ -1,6 +1,7 @@
 /// <reference types="koa" />
 import Application = require("koa");
 import IRouter from "./router/IRouter";
+import { IRequestConstructor } from "./net/server/Request";
 /**
  * @author Raykid
  * @email initial_r@qq.com
@@ -74,6 +75,13 @@ export interface EngineInitParams {
      * @memberof EngineInitParams
      */
     routers?: IRouter[];
+    /**
+     * 需要注册的请求结构体类型数组
+     *
+     * @type {IRequestConstructor[]}
+     * @memberof EngineInitParams
+     */
+    requests?: IRequestConstructor[];
 }
 /** 再额外导出一个单例 */
 export declare const engine: Engine;
