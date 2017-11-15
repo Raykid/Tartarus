@@ -1,7 +1,7 @@
 {
-  "name": "tartarus",
+  "name": "tartarus-r",
   "version": "0.0.1",
-  "description": "基于koa2的NodeJs服务器开发框架",
+  "description": "NodeJS web development framework based on KOA2.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
