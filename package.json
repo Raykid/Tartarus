@@ -1,6 +1,6 @@
 {
   "name": "tartarus",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "基于koa2的NodeJs服务器开发框架",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/Raykid/Tartarus.git"
   },
-  "author": "Raykid",
+  "author": "raykid",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Raykid/Tartarus/issues"
